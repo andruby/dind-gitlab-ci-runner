@@ -17,17 +17,17 @@ RUN apt-get update -qq
 RUN apt-get install -qqy lxc-docker
 
 # Install the magic wrapper.
-ADD ./wrapdocker /usr/local/bin/wrapdocker
+ADD wrapdocker /usr/local/bin/wrapdocker
 RUN chmod +x /usr/local/bin/wrapdocker
 
 # Must use a volume because AUFS cannot use an AUFS mount as a branch
 # https://github.com/jpetazzo/dind#important-warning-about-disk-usage
 VOLUME /var/lib/docker
 
-# And an extra wrapper to combine both
-ADD ./init-with-wrapdocker /app/init-with-wrapdocker
-RUN chmod +x /app/init-with-wrapdocker
+# Setup supervisord which runs wrapdocker and the ci runner
+RUN mkdir -p /var/log/supervisor
+ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-ENTRYPOINT ["/app/init-with-wrapdocker"]
-CMD ["app:start"]
+# Start supervisord
+CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
 
