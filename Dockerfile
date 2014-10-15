@@ -26,10 +26,10 @@ VOLUME /var/lib/docker
 
 # Setup supervisord which runs wrapdocker and the ci runner
 RUN mkdir -p /var/log/supervisor
-ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+ADD supervisord.conf /etc/supervisor/conf.d/supervisord-with-wrapdocker.conf
 
 ENV DOCKER_HOST tcp://127.0.0.1:4243
 
 # Start supervisord
-CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
+CMD ["supervisord", "-c", "/etc/supervisor/supervisord-with-wrapdocker.conf"]
 
