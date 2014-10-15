@@ -28,6 +28,8 @@ VOLUME /var/lib/docker
 RUN mkdir -p /var/log/supervisor
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
+ENV DOCKER_HOST tcp://127.0.0.1:4243
+
 # Start supervisord
 CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
 
